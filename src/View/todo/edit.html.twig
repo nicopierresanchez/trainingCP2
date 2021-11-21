@@ -1,0 +1,8 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <h1>Edit item</h1>
+    <div style="display: none;">{{ todo.id }}</div>
+    {% include 'todo/_form.html.twig' %}
+    <a href="/todo/show?id={{ todo.id }}">Back</a>
+{% endblock %}

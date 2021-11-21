@@ -9,12 +9,12 @@ class ItemController extends AbstractController
     /**
      * List items
      */
-    public function index(): string
+    public function browse(): string
     {
         $itemManager = new ItemManager();
-        $items = $itemManager->selectAll('title');
+        $todos = $itemManager->selectAll('name');
 
-        return $this->twig->render('Item/index.html.twig', ['items' => $items]);
+        return $this->twig->render('todo/browse.html.twig', ['todos' => $todos]);
     }
 
 
@@ -24,9 +24,9 @@ class ItemController extends AbstractController
     public function show(int $id): string
     {
         $itemManager = new ItemManager();
-        $item = $itemManager->selectOneById($id);
+        $todo = $itemManager->selectOneById($id);
 
-        return $this->twig->render('Item/show.html.twig', ['item' => $item]);
+        return $this->twig->render('todo/show.html.twig', ['todo' => $todo]);
     }
 
 
@@ -36,21 +36,20 @@ class ItemController extends AbstractController
     public function edit(int $id): string
     {
         $itemManager = new ItemManager();
-        $item = $itemManager->selectOneById($id);
+        $todo = $itemManager->selectOneById($id);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // clean $_POST data
-            $item = array_map('trim', $_POST);
+            $todo = array_map('trim', $_POST);
 
-            // TODO validations (length, format...)
+            //var_dump($_GET);
+            //die();
 
-            // if validation is ok, update and redirection
-            $itemManager->update($item);
-            header('Location: /items/show?id=' . $id);
+            $itemManager->update($todo);
+            header('Location: /todo/show?id=' . $id);
         }
 
-        return $this->twig->render('Item/edit.html.twig', [
-            'item' => $item,
+        return $this->twig->render('todo/edit.html.twig', [
+            'todo' => $todo,
         ]);
     }
 
@@ -62,17 +61,18 @@ class ItemController extends AbstractController
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // clean $_POST data
-            $item = array_map('trim', $_POST);
+            $todo = array_map('trim', $_POST);
 
             // TODO validations (length, format...)
 
             // if validation is ok, insert and redirection
             $itemManager = new ItemManager();
-            $id = $itemManager->insert($item);
-            header('Location:/items/show?id=' . $id);
+            $id = $itemManager->insert($todo);
+            header('location: /todo/browse');
         }
 
-        return $this->twig->render('Item/add.html.twig');
+        return $this->twig->render('todo/add.html.twig');
+        
     }
 
 
@@ -85,7 +85,7 @@ class ItemController extends AbstractController
             $id = trim($_POST['id']);
             $itemManager = new ItemManager();
             $itemManager->delete((int)$id);
-            header('Location:/items');
+            header('Location:/todo/browse');
         }
     }
 }

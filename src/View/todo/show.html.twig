@@ -1,0 +1,12 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <h1>todo</h1>
+    <p>{{ todo.id }}. {{ todo.name  }} . {{ todo.create_date|date('d-m-Y') }}</p>
+    <a href="/todo/edit?id={{ todo.id }}">Edit</a>
+    <form action="/todo/delete" method="POST">
+        <input type="hidden" name="id" value="{{ todo.id }}">
+        <button>Delete</button>
+    </form>
+    <a href="browse">Back</a>
+{% endblock %}
